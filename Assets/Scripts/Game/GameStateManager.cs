@@ -2,6 +2,7 @@ using System;
 using GimGim.EventSystem;
 using GimGim.Player;
 using GimGim.Utility.Logger;
+using Player;
 using UnityEngine;
 
 namespace GimGim.Game {
@@ -23,8 +24,6 @@ namespace GimGim.Game {
         private FightState _fight;
         private MenuState _menu;
         private CinematicState _cinematic;
-
-        public bool isInteracting;
         
         private void Awake() {
             if (!Instance) {
@@ -43,13 +42,14 @@ namespace GimGim.Game {
         }
 
         private void Start() {
-            
+            CurrentState = _peace;
+            _peace.OnEnter();
         }
 
         private void Update() {
             
         }
-
+        
         public void ChangeState(GameState newState) {
             if (CurrentState.Type == newState.Type) return;
             

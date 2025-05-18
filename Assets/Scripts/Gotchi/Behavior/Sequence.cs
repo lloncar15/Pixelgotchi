@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace GimGim.Behavior {
+namespace GimGim.Gotchi {
     /// <summary>
     /// Executes child nodes in order until one fails or all succeed.
     /// </summary>

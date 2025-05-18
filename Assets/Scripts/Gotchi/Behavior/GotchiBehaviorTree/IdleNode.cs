@@ -1,5 +1,7 @@
 namespace GimGim.Gotchi {
-    public class IdleNode {
-        
+    public class IdleNode : Node {
+        public override NodeState Evaluate() {
+            return NodeState.Success;
+        }
     }
 }

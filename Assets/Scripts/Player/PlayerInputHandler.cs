@@ -1,4 +1,5 @@
 using System;
+using GimGim.EventSystem;
 using GimGim.Game;
 using GimGim.Player;
 using Unity.VisualScripting;
@@ -11,6 +12,8 @@ namespace Player {
         private PlayerInputActions _playerControls;
 
         public Vector2 moveInput;
+        
+        private IEventSubscription _subscription;
         
         private void Awake() {
             _playerControls = new PlayerInputActions();
@@ -28,6 +31,9 @@ namespace Player {
             _playerControls.Player.Choice1.performed += OnChoice1InteractionPerformed;
             _playerControls.Player.Choice2.performed += OnChoice2InteractionPerformed;
             _playerControls.Player.Pause.performed += OnPausePerformed;
+
+            _subscription =
+                NotificationEventSystem.Subscribe(new EventSubscription<OnStateChangedEvent>(OnStateChanged));
         }
         
         private void OnDisable() {
@@ -42,6 +48,8 @@ namespace Player {
             _playerControls.Player.Choice1.performed -= OnChoice1InteractionPerformed;
             _playerControls.Player.Choice2.performed -= OnChoice2InteractionPerformed;
             _playerControls.Player.Pause.performed -= OnPausePerformed;
+            
+            NotificationEventSystem.Unsubscribe(_subscription);
         }
         
         private void Update() {
@@ -83,6 +91,16 @@ namespace Player {
         
         private void OnPausePerformed(InputAction.CallbackContext obj) {
             
+        }
+
+        private void OnStateChanged(OnStateChangedEvent eventData) {
+            GameStateType type = eventData.State.Type;
+            
+            if (type == GameStateType.Cinematic || type == GameStateType.Menu) {
+                _playerControls.Player.Disable();
+            } else {
+                _playerControls.Player.Enable();
+            }
         }
     }
 }

@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace GimGim.Behavior {
+namespace GimGim.Gotchi {
     public abstract class Tree : MonoBehaviour {
         private Node _root = null;
 

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace GimGim.Behavior {
+namespace GimGim.Gotchi {
     public enum NodeState {
         Running,
         Success,
