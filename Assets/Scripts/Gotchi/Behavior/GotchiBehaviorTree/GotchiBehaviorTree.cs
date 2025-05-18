@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using GimGim.EventSystem;
 using GimGim.Game;
@@ -11,7 +10,9 @@ namespace GimGim.Gotchi {
         public BehaviorTreeOptions options;
 
         private IEventSubscription _playerDeathSub;
-        private bool _playerDied = false;
+        private bool _playerDied;
+
+        private float _lastAttackTime = -100f;
         
         private void OnEnable() {
             _playerDeathSub = NotificationEventSystem.Subscribe(new EventSubscription<PlayerDiedEvent>(OnPlayerDeath));
@@ -30,26 +31,63 @@ namespace GimGim.Gotchi {
             Node root = new Selector(new List<Node> {
                 SetupPeaceBranch(),
                 SetupAttackBranch(),
-                new IdleNode()
+                new ActionNode(() => NodeState.Running)
             });
 
             return root;
         }
 
-        private static Node SetupAttackBranch() {
-            Node root = new Selector();
+        #region Attack branch behavior
+        private Node SetupAttackBranch() {
+            Node attackRoamingSequence = new Sequence(new List<Node> {
+                new ConditionNode(IsAttackOnCooldown),
+                
+            });
+            
+            Node attackSequence = new Sequence(new List<Node> {
+                
+            });
+            
+            Node fightSelector = new Selector(new List<Node> {
+                attackRoamingSequence,
+                attackSequence
+            });
+            
+            Node root = new Sequence(new List<Node> {
+                new ConditionNode(IsInFightState),
+                new ConditionNode(IsPlayerDead),
+                fightSelector
+            });
 
             return root;
         }
+        #endregion
 
-        private static Node SetupPeaceBranch() {
-            Node root = new Selector();
-
+        #region Peace branch behavior
+        private Node SetupPeaceBranch() {
+            Node root = new Sequence(new List<Node>{
+                new ConditionNode(IsInPeaceState),
+                
+            });
+            
             return root;
         }
+        #endregion
 
+        #region Callbacks
         private void OnPlayerDeath(PlayerDiedEvent e) {
             _playerDied = true;
         }
+        #endregion
+
+        #region Condition Methods
+
+        private bool IsInPeaceState() => GameStateManager.GetGameStateType() == GameStateType.Peace;
+        private bool IsInFightState() => GameStateManager.GetGameStateType() == GameStateType.Fight;
+        private bool IsPlayerDead() => _playerDied;
+
+        private bool IsAttackOnCooldown() => Time.time > _lastAttackTime + options.attackCooldown;
+
+        #endregion
     }
 }

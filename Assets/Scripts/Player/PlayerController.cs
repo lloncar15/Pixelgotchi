@@ -7,6 +7,8 @@ namespace GimGim.Player {
 
         public PlayerStats stats;
         
+        public bool isDead = false;
+        
         private void Awake() {
             _inputHandler = GetComponent<PlayerInputHandler>();
         }

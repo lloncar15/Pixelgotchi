@@ -66,5 +66,7 @@ namespace GimGim.Game {
         public void SetFightState() => Instance.ChangeState(_fight);
         public void SetMenuState() => Instance.ChangeState(_menu);
         public void SetCinematicState() => Instance.ChangeState(_cinematic);
+        
+        public static GameStateType GetGameStateType() => Instance.CurrentState.Type;
     }
 }
