@@ -1,74 +1,77 @@
 using System;
+using GimGim.Player;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace Player {
     public class PlayerInputHandler : MonoBehaviour {
-        public Vector2 MoveInput { get; private set; }
-        public bool InteractPressed { get; private set; }
-        public bool AttackPressed { get; private set; }
-        public bool Choice1Pressed { get; private set; }
-        public bool Choice2Pressed { get; private set; }
-        public bool CancelPressed { get; private set; }
-        public bool PausePressed { get; private set; }
-        
-        private PlayerInput _playerInput;
-        private InputActionMap _playerInputMap;
+        private PlayerInputActions playerControls;
 
+        public Vector2 MoveInput;
+        
         private void Awake() {
-            _playerInput = GetComponent<PlayerInput>();
-            _playerInputMap = _playerInput.currentActionMap;
-            _playerInputMap["Move"].performed += OnMove;
-            _playerInputMap["Interact"].performed += OnInteract;
-            _playerInputMap["Attack"].performed += OnAttack;
-            _playerInputMap["Choice1"].performed += OnChoice1;
-            _playerInputMap["Choice2"].performed += OnChoice2;
-            _playerInputMap["CancelInteraction"].performed += OnCancel;
-            _playerInputMap["Pause"].performed += OnPause;
+            playerControls = new PlayerInputActions();
         }
 
         private void OnEnable() {
-            _playerInputMap.Enable();
+            playerControls.Player.Enable();
+            
+            playerControls.Player.Move.performed += OnMovePerformed;
+            playerControls.Player.Move.canceled += OnMoveCanceled;
+
+            playerControls.Player.Attack.performed += OnAttackPerformed;
+            playerControls.Player.Interact.performed += OnInteractPerformed;
+            playerControls.Player.CancelInteraction.performed += OnCancelInteractionPerformed;
+            playerControls.Player.Choice1.performed += OnChoice1InteractionPerformed;
+            playerControls.Player.Choice2.performed += OnChoice2InteractionPerformed;
+            playerControls.Player.Pause.performed += OnPausePerformed;
         }
         
         private void OnDisable() {
-            _playerInputMap["Move"].performed -= OnMove;
-            _playerInputMap["Interact"].performed -= OnInteract;
-            _playerInputMap["Attack"].performed -= OnAttack;
-            _playerInputMap["Choice1"].performed -= OnChoice1;
-            _playerInputMap["Choice2"].performed -= OnChoice2;
-            _playerInputMap["CancelInteraction"].performed -= OnCancel;
-            _playerInputMap["Pause"].performed += OnPause;
-            _playerInputMap.Disable();
+            playerControls.Player.Disable();
+            
+            playerControls.Player.Move.performed -= OnMovePerformed;
+            playerControls.Player.Move.canceled -= OnMoveCanceled;
+            
+            playerControls.Player.Attack.performed -= OnAttackPerformed;
+            playerControls.Player.Interact.performed -= OnInteractPerformed;
+            playerControls.Player.CancelInteraction.performed -= OnCancelInteractionPerformed;
+            playerControls.Player.Choice1.performed -= OnChoice1InteractionPerformed;
+            playerControls.Player.Choice2.performed -= OnChoice2InteractionPerformed;
+            playerControls.Player.Pause.performed -= OnPausePerformed;
+        }
+        
+        private void OnMovePerformed(InputAction.CallbackContext obj) {
+            MoveInput = obj.ReadValue<Vector2>();
+        }
+        
+        private void OnMoveCanceled(InputAction.CallbackContext obj) {
+            MoveInput = Vector2.zero;
         }
 
-        public void OnMove(InputAction.CallbackContext context) {
-            MoveInput = context.ReadValue<Vector2>();
+        private void OnAttackPerformed(InputAction.CallbackContext obj) {
+            
         }
-
-        public void OnInteract(InputAction.CallbackContext context) {
-            InteractPressed = context.performed;
+        
+        private void OnInteractPerformed(InputAction.CallbackContext obj) {
+            
         }
-
-        public void OnAttack(InputAction.CallbackContext context) {
-            AttackPressed = context.performed;
+        
+        private void OnCancelInteractionPerformed(InputAction.CallbackContext obj) {
+            
         }
-
-        public void OnChoice1(InputAction.CallbackContext context) {
-            Choice1Pressed = context.performed;
+        
+        private void OnChoice1InteractionPerformed(InputAction.CallbackContext obj) {
+            
         }
-
-        public void OnChoice2(InputAction.CallbackContext context) {
-            Choice2Pressed = context.performed;
+        
+        private void OnChoice2InteractionPerformed(InputAction.CallbackContext obj) {
+            
         }
-
-        public void OnCancel(InputAction.CallbackContext context) {
-            CancelPressed = context.performed;
-        }
-
-        public void OnPause(InputAction.CallbackContext context) {
-            PausePressed = context.performed;
+        
+        private void OnPausePerformed(InputAction.CallbackContext obj) {
+            
         }
     }
 }

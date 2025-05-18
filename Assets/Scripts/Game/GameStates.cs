@@ -1,6 +1,8 @@
-public enum GameState {
-    Peace,
-    Fight,
-    Menu,
-    Cinematic
+namespace GimGim.Game {
+    public enum GameState {
+        Peace,
+        Fight,
+        Menu,
+        Cinematic
+    }
 }
