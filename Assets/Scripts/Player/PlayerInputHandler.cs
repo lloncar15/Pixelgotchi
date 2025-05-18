@@ -1,53 +1,64 @@
 using System;
+using GimGim.Game;
 using GimGim.Player;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Android;
 using UnityEngine.InputSystem;
 
 namespace Player {
     public class PlayerInputHandler : MonoBehaviour {
-        private PlayerInputActions playerControls;
+        private PlayerInputActions _playerControls;
 
-        public Vector2 MoveInput;
+        public Vector2 moveInput;
         
         private void Awake() {
-            playerControls = new PlayerInputActions();
+            _playerControls = new PlayerInputActions();
         }
 
         private void OnEnable() {
-            playerControls.Player.Enable();
+            _playerControls.Player.Enable();
             
-            playerControls.Player.Move.performed += OnMovePerformed;
-            playerControls.Player.Move.canceled += OnMoveCanceled;
+            _playerControls.Player.Move.performed += OnMovePerformed;
+            _playerControls.Player.Move.canceled += OnMoveCanceled;
 
-            playerControls.Player.Attack.performed += OnAttackPerformed;
-            playerControls.Player.Interact.performed += OnInteractPerformed;
-            playerControls.Player.CancelInteraction.performed += OnCancelInteractionPerformed;
-            playerControls.Player.Choice1.performed += OnChoice1InteractionPerformed;
-            playerControls.Player.Choice2.performed += OnChoice2InteractionPerformed;
-            playerControls.Player.Pause.performed += OnPausePerformed;
+            _playerControls.Player.Attack.performed += OnAttackPerformed;
+            _playerControls.Player.Interact.performed += OnInteractPerformed;
+            _playerControls.Player.CancelInteraction.performed += OnCancelInteractionPerformed;
+            _playerControls.Player.Choice1.performed += OnChoice1InteractionPerformed;
+            _playerControls.Player.Choice2.performed += OnChoice2InteractionPerformed;
+            _playerControls.Player.Pause.performed += OnPausePerformed;
         }
         
         private void OnDisable() {
-            playerControls.Player.Disable();
+            _playerControls.Player.Disable();
             
-            playerControls.Player.Move.performed -= OnMovePerformed;
-            playerControls.Player.Move.canceled -= OnMoveCanceled;
+            _playerControls.Player.Move.performed -= OnMovePerformed;
+            _playerControls.Player.Move.canceled -= OnMoveCanceled;
             
-            playerControls.Player.Attack.performed -= OnAttackPerformed;
-            playerControls.Player.Interact.performed -= OnInteractPerformed;
-            playerControls.Player.CancelInteraction.performed -= OnCancelInteractionPerformed;
-            playerControls.Player.Choice1.performed -= OnChoice1InteractionPerformed;
-            playerControls.Player.Choice2.performed -= OnChoice2InteractionPerformed;
-            playerControls.Player.Pause.performed -= OnPausePerformed;
+            _playerControls.Player.Attack.performed -= OnAttackPerformed;
+            _playerControls.Player.Interact.performed -= OnInteractPerformed;
+            _playerControls.Player.CancelInteraction.performed -= OnCancelInteractionPerformed;
+            _playerControls.Player.Choice1.performed -= OnChoice1InteractionPerformed;
+            _playerControls.Player.Choice2.performed -= OnChoice2InteractionPerformed;
+            _playerControls.Player.Pause.performed -= OnPausePerformed;
+        }
+        
+        private void Update() {
+#if UNITY_EDITOR
+            if (Keyboard.current.digit3Key.wasPressedThisFrame) GameStateManager.Instance.SetPeaceState();
+            if (Keyboard.current.digit4Key.wasPressedThisFrame) GameStateManager.Instance.SetFightState();
+            if (Keyboard.current.digit5Key.wasPressedThisFrame) GameStateManager.Instance.SetMenuState();
+            if (Keyboard.current.digit6Key.wasPressedThisFrame) GameStateManager.Instance.SetCinematicState();
+#endif
         }
         
         private void OnMovePerformed(InputAction.CallbackContext obj) {
-            MoveInput = obj.ReadValue<Vector2>();
+            moveInput = obj.ReadValue<Vector2>();
         }
         
         private void OnMoveCanceled(InputAction.CallbackContext obj) {
-            MoveInput = Vector2.zero;
+            moveInput = Vector2.zero;
         }
 
         private void OnAttackPerformed(InputAction.CallbackContext obj) {

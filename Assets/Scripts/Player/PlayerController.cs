@@ -16,7 +16,7 @@ namespace GimGim.Player {
         }
         
         private void HandleMovement() {
-            Vector2 moveInput = _inputHandler.MoveInput;
+            Vector2 moveInput = _inputHandler.moveInput;
             Vector3 moveDirection = new Vector3(moveInput.x, moveInput.y, 0);
             transform.Translate(moveDirection * (Time.deltaTime * stats.moveSpeed));
         }
