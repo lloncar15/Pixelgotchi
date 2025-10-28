@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72395f0ea97f46f397c310e7c01103d2, type: 3}
+  m_Name: SpecialAmmo
+  m_EditorClassIdentifier: 
+  data:
+    currentAmount: 0
+    totalCollectedAmount: 0
+    collectedThisScene: 0
+    collectableType: 3
+  ammoType: 4
